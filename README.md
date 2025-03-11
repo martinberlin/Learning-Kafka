@@ -38,6 +38,7 @@ Should return: INFO [KafkaRaftServer nodeId=1] Kafka Server started (kafka.serve
 All your ddev configurations for a website should be in **.ddev** folder
 
 ```
+# FILE PATH: .ddev/docker-compose.kafka.yaml
 services:
   kafka:
     image: 'bitnami/kafka:latest'
