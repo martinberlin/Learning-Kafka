@@ -1,9 +1,9 @@
 # Learning-Kafka
 My steps and documentation learning event streaming Kafka
 
-## Installation with Docker
+## Installation with Docker and DDEV
 
-This git repository will be mostly for documentation purpouses with just a few code examples mostly in PHP using librdkafka-dev PHP 8 extension
+This git repository will be mostly for documentation purpouses with just a few code examples mostly in PHP using librdkafka-dev PHP 8 extension. This was my first docker standalone example. With DDEV comes just after, so just scroll down:
 
 ```
 # FILE:  compose.yaml
@@ -32,6 +32,38 @@ NOTE: This should not be used in production since uses a PLAINTEXT protocol for 
      $ docker compose up
 
 Should return: INFO [KafkaRaftServer nodeId=1] Kafka Server started (kafka.server.KafkaRaftServer)
+
+## DDEV
+
+All your ddev configurations for a website should be in **.ddev** folder
+
+```
+services:
+  kafka:
+    image: 'bitnami/kafka:latest'
+    ports:
+      - '9094:9094'
+    container_name: ddev-${DDEV_SITENAME}-kafka
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: ${DDEV_APPROOT}
+
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_BROKER_ID=1
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@:9093
+      - ALLOW_PLAINTEXT_LISTENER=yes
+```
+
+Doing a: ddev describe
+![grafik](https://github.com/user-attachments/assets/db122b51-8ab1-41bf-9229-5463f814bbb9)
+
 
 ## Let's create a topic
 
